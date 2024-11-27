@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../controllers/home_controller.dart';
 import '../../utils/screen_adapter.dart';
 import '../../utils/app_colors.dart';
+import '../../widgets/common_footer.dart';
 
 /// 首页视图
 /// 展示网页设计工具的主要功能和特点
@@ -17,6 +19,20 @@ class HomeView extends GetView<HomeController> {
         slivers: [
           _buildAppBar(),
           _buildMainContent(),
+          _buildMainContent(),
+          _buildMainContent(),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: CommonFooter(
+              onAboutUs: () =>
+                  _launchUrl('https://www.wix.com/blog/web-design'),
+              onContactUs: () =>
+                  _launchUrl('https://www.wix.com/blog/web-design'),
+              onPrivacyPolicy: () =>
+                  _launchUrl('https://www.wix.com/blog/web-design'),
+              onTerms: () => _launchUrl('https://www.wix.com/blog/web-design'),
+            ),
+          ),
         ],
       ),
     );
@@ -25,7 +41,7 @@ class HomeView extends GetView<HomeController> {
   /// 构建应用栏
   Widget _buildAppBar() {
     return SliverAppBar(
-      floating: true,
+      pinned: true,
       backgroundColor: AppColors.background,
       elevation: 0,
       title: Row(
@@ -100,10 +116,9 @@ class HomeView extends GetView<HomeController> {
     return Text(
       'Design beautiful and interactive display ads that work seamlessly across devices.',
       style: TextStyle(
-        fontSize: ScreenAdapter.fontSize(24),
-        fontWeight: FontWeight.w400,
+        fontSize: ScreenAdapter.fontSize(20),
         color: AppColors.textSecondary,
-        height: 1.4,
+        height: 1.5,
       ),
     );
   }
@@ -173,5 +188,12 @@ class HomeView extends GetView<HomeController> {
         ),
       );
     });
+  }
+
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

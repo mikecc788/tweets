@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tweets/pages/home/widgets/building_section.dart';
+import 'package:tweets/pages/home/widgets/top_content.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controllers/home_controller.dart';
 import '../../utils/screen_adapter.dart';
 import '../../utils/app_colors.dart';
 import '../../widgets/common_footer.dart';
+import 'widgets/company_carousel.dart';
+import 'widgets/feature_grid.dart';
+import 'widgets/statistics_carousel.dart';
 
 /// 首页视图
 /// 展示网页设计工具的主要功能和特点
@@ -14,12 +19,10 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.backgroundDark,
       body: CustomScrollView(
         slivers: [
           _buildAppBar(),
-          _buildMainContent(),
-          _buildMainContent(),
           _buildMainContent(),
           SliverFillRemaining(
             hasScrollBody: false,
@@ -43,7 +46,8 @@ class HomeView extends GetView<HomeController> {
     return SliverAppBar(
       pinned: true,
       backgroundColor: AppColors.background,
-      elevation: 0,
+      elevation: 0.5,
+      shadowColor: AppColors.border,
       title: Row(
         children: [
           _buildLogo(),
@@ -59,8 +63,8 @@ class HomeView extends GetView<HomeController> {
       'Web Designer',
       style: TextStyle(
         fontSize: ScreenAdapter.fontSize(32),
-        fontWeight: FontWeight.w900,
-        color: AppColors.primary,
+        fontWeight: FontWeight.w800,
+        color: AppColors.textPrimary,
       ),
     );
   }
@@ -70,7 +74,9 @@ class HomeView extends GetView<HomeController> {
     return Row(
       children: [
         _buildNavItem('Features', 0),
+        SizedBox(width: ScreenAdapter.setWidth(24)),
         _buildNavItem('Examples', 1),
+        SizedBox(width: ScreenAdapter.setWidth(24)),
         _buildNavItem('Resources', 2),
       ],
     );
@@ -86,10 +92,20 @@ class HomeView extends GetView<HomeController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: ScreenAdapter.setHeight(40)),
+            TopContent(onStartBuilding: () {}, onResources: () {}),
+            CompanyCarousel(),
             SizedBox(height: ScreenAdapter.setHeight(100)),
-            _buildHeadline(),
+            const StatisticsCarousel(),
             SizedBox(height: ScreenAdapter.setHeight(24)),
-            _buildSubtitle(),
+            FeatureGrid(),
+            SizedBox(height: ScreenAdapter.setHeight(40)),
+            BuildingSection(
+              onGetStarted: () {
+                // Add your desired action when "Get Started" is clicked
+                _launchUrl('https://www.wix.com/website/builder');
+              },
+            ),
             SizedBox(height: ScreenAdapter.setHeight(40)),
             _buildGetStartedButton(),
           ],
@@ -101,12 +117,12 @@ class HomeView extends GetView<HomeController> {
   /// 构建标题文本
   Widget _buildHeadline() {
     return Text(
-      'Create engaging\nHTML5 banners',
+      'Create Beautiful Websites',
       style: TextStyle(
-        fontSize: ScreenAdapter.fontSize(64),
-        fontWeight: FontWeight.w900,
+        fontSize: ScreenAdapter.fontSize(48),
+        fontWeight: FontWeight.w800,
         color: AppColors.textPrimary,
-        height: 1.1,
+        height: 1.2,
       ),
     );
   }
@@ -114,7 +130,7 @@ class HomeView extends GetView<HomeController> {
   /// 构建副标题文本
   Widget _buildSubtitle() {
     return Text(
-      'Design beautiful and interactive display ads that work seamlessly across devices.',
+      'Design and launch your website with our intuitive tools',
       style: TextStyle(
         fontSize: ScreenAdapter.fontSize(20),
         color: AppColors.textSecondary,
@@ -132,62 +148,42 @@ class HomeView extends GetView<HomeController> {
         foregroundColor: AppColors.textLight,
         padding: EdgeInsets.symmetric(
           horizontal: ScreenAdapter.setWidth(32),
-          vertical: ScreenAdapter.setHeight(20),
+          vertical: ScreenAdapter.setHeight(16),
         ),
-        elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
       child: Text(
-        'Get started',
+        'Get Started',
         style: TextStyle(
-          fontSize: ScreenAdapter.fontSize(18),
-          fontWeight: FontWeight.w500,
-          color: AppColors.textLight,
+          fontSize: ScreenAdapter.fontSize(16),
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
   }
 
   /// 构建导航项
-  Widget _buildNavItem(String text, int index) {
-    return Obx(() {
-      final isSelected = controller.selectedIndex.value == index;
-      return MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: (_) => controller.setHovered(true),
-        onExit: (_) => controller.setHovered(false),
-        child: GestureDetector(
-          onTap: () => controller.setSelectedIndex(index),
-          child: Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: ScreenAdapter.setWidth(12),
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: ScreenAdapter.setWidth(24),
-              vertical: ScreenAdapter.setHeight(12),
-            ),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: isSelected ? AppColors.primary : Colors.transparent,
-                  width: 2,
-                ),
-              ),
-            ),
-            child: Text(
-              text,
-              style: TextStyle(
-                color: isSelected ? AppColors.primary : AppColors.textSecondary,
-                fontSize: ScreenAdapter.fontSize(24),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
+  Widget _buildNavItem(String title, int index) {
+    return TextButton(
+      onPressed: () {},
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenAdapter.setWidth(16),
+          vertical: ScreenAdapter.setHeight(8),
         ),
-      );
-    });
+        backgroundColor: Colors.transparent,
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: ScreenAdapter.fontSize(16),
+          color: AppColors.textSecondary,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
   }
 
   Future<void> _launchUrl(String urlString) async {

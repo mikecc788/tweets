@@ -43,6 +43,7 @@ dependencies:
   uuid: ^4.0.0
   get: ^4.6.6
   url_launcher: ^6.2.1
+  fl_chart: ^0.66.2
 
 dev_dependencies:
   flutter_test:
@@ -70,5 +71,6 @@ flutter:
     - assets/
     - assets/avatar/
     - assets/icon/
+    - assets/images/
 flutter_intl:
   enabled: true

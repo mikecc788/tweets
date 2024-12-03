@@ -10,5 +10,5 @@ flutter config --enable-web
 # Get packages
 flutter pub get
 
-# Build web
-flutter build web --release
+# Build for web with CanvasKit renderer
+flutter build web --release --web-renderer=canvaskit

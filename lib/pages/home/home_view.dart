@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tweets/pages/home/widgets/aboutus_item.dart';
 import 'package:tweets/pages/home/widgets/building_section.dart';
+import 'package:tweets/pages/home/widgets/support_item.dart';
 import 'package:tweets/pages/home/widgets/top_content.dart';
 import 'package:tweets/utils/gaps.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -84,59 +86,42 @@ class HomeView extends GetView<HomeController> {
                 _launchUrl('https://www.wix.com/website/builder');
               },
             ),
+            AboutUsItem(
+                topText: "Catch up on what's happening across the ecosystem",
+                imagePaths: [
+                  'assets/images/feature3.jpg',
+                  'assets/images/feature1.jpg',
+                  'assets/images/feature2.jpg',
+                ],
+                leftText: 'Founded in \n 2016',
+                rightText: 'users \n 100k+'),
             SizedBox(height: ScreenAdapter.setHeight(40)),
-            _buildGetStartedButton(),
+            SupportItem(
+                title: 'The support you need, when you need it',
+                links: [
+                  SupportLink(
+                      title: 'Forum',
+                      subtitle: 'Your Subtitle',
+                      onTap: () {
+                        // Action to perform when tapped
+                        _launchUrl('https://example.com');
+                      }),
+                  SupportLink(
+                      title: 'Office hours',
+                      subtitle: 'Your Subtitle',
+                      onTap: () {
+                        // Action to perform when tapped
+                        _launchUrl('https://example.com');
+                      }),
+                  SupportLink(
+                      title: 'How to earn crypto?',
+                      subtitle: 'Your Subtitle',
+                      onTap: () {
+                        // Action to perform when tapped
+                        _launchUrl('https://example.com');
+                      }),
+                ]),
           ],
-        ),
-      ),
-    );
-  }
-
-  /// 构建标题文本
-  Widget _buildHeadline() {
-    return Text(
-      'Create Beautiful Websites',
-      style: TextStyle(
-        fontSize: ScreenAdapter.fontSize(48),
-        fontWeight: FontWeight.w800,
-        color: AppColors.textPrimary,
-        height: 1.2,
-      ),
-    );
-  }
-
-  /// 构建副标题文本
-  Widget _buildSubtitle() {
-    return Text(
-      'Design and launch your website with our intuitive tools',
-      style: TextStyle(
-        fontSize: ScreenAdapter.fontSize(20),
-        color: AppColors.textSecondary,
-        height: 1.5,
-      ),
-    );
-  }
-
-  /// 构建开始按钮
-  Widget _buildGetStartedButton() {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.textLight,
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenAdapter.setWidth(32),
-          vertical: ScreenAdapter.setHeight(16),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      child: Text(
-        'Get Started',
-        style: TextStyle(
-          fontSize: ScreenAdapter.fontSize(16),
-          fontWeight: FontWeight.w600,
         ),
       ),
     );

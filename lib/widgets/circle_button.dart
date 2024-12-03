@@ -42,6 +42,7 @@ class _CircleButtonState extends State<CircleButton> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: InkWell(
+        borderRadius: BorderRadius.circular(buttonHeight / 2),
         onTap: widget.onPressed,
         child: Container(
           height: buttonHeight,
@@ -50,10 +51,13 @@ class _CircleButtonState extends State<CircleButton> {
             horizontal: ScreenAdapter.setWidth(32),
           ),
           decoration: BoxDecoration(
-            color: _isHovered ? const Color(0xFF382054) : (widget.backgroundColor ?? AppColors.textPrimary),
+            color: _isHovered
+                ? const Color(0xFF382054)
+                : (widget.backgroundColor ?? AppColors.textPrimary),
             borderRadius: BorderRadius.circular(buttonHeight / 2),
-            border:
-                widget.border ? Border.all(color: AppColors.textLight, width: 1) : null,
+            border: widget.border
+                ? Border.all(color: AppColors.textLight, width: 1)
+                : null,
           ),
           child: Center(
             child: Text(

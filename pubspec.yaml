@@ -44,6 +44,7 @@ dependencies:
   get: ^4.6.6
   url_launcher: ^6.2.1
   fl_chart: ^0.66.2
+  card_swiper: ^3.0.1
 
 dev_dependencies:
   flutter_test:

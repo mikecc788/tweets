@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tweets/widgets/circle_button.dart';
 import '../../../utils/screen_adapter.dart';
 import '../../../utils/app_colors.dart';
 
@@ -17,10 +18,19 @@ class BuildingSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: ScreenAdapter.setHeight(60)),
       child: Container(
         width: ScreenAdapter.screenWidth,
-        height: 240,
+        height: 280,
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.5),
           borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF382054),
+              const Color(0xFF121212),
+              const Color(0xFF19141E),
+            ],
+          ),
         ),
         child: Column(
           children: [
@@ -35,27 +45,8 @@ class BuildingSection extends StatelessWidget {
               ),
             ),
             SizedBox(height: ScreenAdapter.setHeight(40)),
-            ElevatedButton(
-              onPressed: onGetStarted,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.textLight,
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenAdapter.setWidth(32),
-                  vertical: ScreenAdapter.setHeight(16),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                'Get Started',
-                style: TextStyle(
-                  fontSize: ScreenAdapter.fontSize(16),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
+            CircleButton(
+                text: 'Learn more', onPressed: () => Get.toNamed('/about')),
           ],
         ),
       ),

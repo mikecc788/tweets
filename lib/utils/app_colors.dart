@@ -49,6 +49,14 @@ class AppColors {
 
   // Dark Mode Check
   static final _isDarkMode = Get.isDarkMode;
+  static Color blackWithAlpha(double alpha) {
+    return Color.fromRGBO(0, 0, 0, alpha);
+  }
+
+  // Common black opacity values
+  static Color get blackOpacity10 => blackWithAlpha(0.1);
+  static Color get blackOpacity40 => blackWithAlpha(0.4);
+  static Color get blackOpacity60 => blackWithAlpha(0.6);
 
   // 获取主题相关颜色
   static Color get scaffoldBackground =>

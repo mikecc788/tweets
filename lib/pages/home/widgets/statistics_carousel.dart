@@ -1,6 +1,7 @@
 /// 导入必要的包
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:tweets/utils/gaps.dart';
 import '../../../utils/app_colors.dart';
 
 /// 统计数据轮播组件
@@ -92,38 +93,71 @@ class _StatisticsCarouselState extends State<StatisticsCarousel>
     super.dispose();
   }
 
+  /// 构建圆形箭头按钮
+  /// [isLeft] - 是否是左箭头
+  Widget _buildArrowButton(bool isLeft) {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF343A4D),
+        border: Border.all(
+          color: AppColors.blackOpacity10,
+          width: 1,
+        ),
+      ),
+      child: IconButton(
+        icon: Icon(
+          isLeft ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios,
+          color: Colors.white,
+          size: 24,
+        ),
+        onPressed: () {
+          if (isLeft && _currentPage > 0) {
+            setState(() {
+              _currentPage--;
+            });
+          } else if (!isLeft && _currentPage < statistics.length - 1) {
+            setState(() {
+              _currentPage++;
+            });
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isSmallScreen = constraints.maxWidth < 600;
-        return Container(
-          height: isSmallScreen ? 450 : 380,
-          child: Stack(
-            children: [
-              PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                  _animationController.forward().then((_) {
-                    _animationController.reverse();
-                  });
-                },
-                itemCount: statistics.length,
-                itemBuilder: (context, index) {
-                  return FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: _buildStatisticCard(
-                      statistics[index],
-                      isSmallScreen,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 80.0),
+              child: _buildArrowButton(true),
+            ), // 左箭头
+            Column(
+              children: [
+                _buildStatisticCard(statistics[_currentPage], isSmallScreen),
+                Row(children: [
+                  _buildLineChart(
+                      statistics[_currentPage]['chartData'] as List<FlSpot>),
+                  Gaps.h16,
+                  _buildLineChart(
+                      statistics[_currentPage]['chartData'] as List<FlSpot>),
+                ])
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 80.0),
+              child: _buildArrowButton(false),
+            ), // 右箭头
+          ],
         );
       },
     );
@@ -135,9 +169,8 @@ class _StatisticsCarouselState extends State<StatisticsCarousel>
   Widget _buildStatisticCard(Map<String, dynamic> data, bool isSmallScreen) {
     try {
       return Container(
-        width: MediaQuery.of(context).size.width * (isSmallScreen ? 0.9 : 0.3),
-        margin: EdgeInsets.symmetric(horizontal: 20),
-        padding: EdgeInsets.all(20),
+        width: isSmallScreen ? 300 : 600,
+        padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: const Color(0xFF1A1A1A).withOpacity(0.3),
           borderRadius: BorderRadius.circular(20),
@@ -145,48 +178,38 @@ class _StatisticsCarouselState extends State<StatisticsCarousel>
             color: Colors.white.withOpacity(0.1),
             width: 1,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 15,
-              offset: Offset(0, 8),
-            ),
-          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               data['title'] ?? 'Unknown',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: isSmallScreen ? 16 : 18,
-                fontWeight: FontWeight.w500,
+                fontSize: isSmallScreen ? 20 : 24,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 16),
             Text(
               data['value'] ?? '0',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: isSmallScreen ? 28 : 32,
+                fontSize: isSmallScreen ? 32 : 40,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20),
-            Expanded(
-              child: _buildLineChart(data['chartData'] as List<FlSpot>),
-            ),
-            SizedBox(height: 20),
+            SizedBox(height: 24),
             Row(
               children: ((data['subStats'] as List?) ?? []).map<Widget>((stat) {
                 return Expanded(
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.only(right: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.blackOpacity10,
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,15 +218,15 @@ class _StatisticsCarouselState extends State<StatisticsCarousel>
                           stat['title'] ?? '',
                           style: TextStyle(
                             color: Colors.white70,
-                            fontSize: isSmallScreen ? 10 : 12,
+                            fontSize: isSmallScreen ? 12 : 14,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 8),
                         Text(
                           stat['value'] ?? '',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: isSmallScreen ? 14 : 16,
+                            fontSize: isSmallScreen ? 16 : 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -237,51 +260,64 @@ class _StatisticsCarouselState extends State<StatisticsCarousel>
     final minY = spots.map((e) => e.y).reduce((a, b) => a < b ? a : b) * 0.8;
     final maxY = spots.map((e) => e.y).reduce((a, b) => a > b ? a : b) * 1.2;
 
-    return LineChart(
-      LineChartData(
-        gridData: FlGridData(show: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(show: false),
-        minX: 0,
-        maxX: 6,
-        minY: minY,
-        maxY: maxY,
-        lineBarsData: [
-          LineChartBarData(
-            spots: spots,
-            isCurved: true,
-            gradient: LinearGradient(
-              colors: [
-                Colors.purple.withAlpha((0.8 * 255).toInt()),
-                Colors.blue.withAlpha((0.8 * 255).toInt()),
-              ],
-            ),
-            barWidth: 3,
-            isStrokeCapRound: true,
-            dotData: FlDotData(
-              show: true,
-              getDotPainter: (spot, percent, barData, index) {
-                return FlDotCirclePainter(
-                  radius: 3,
-                  color: Colors.white,
-                  strokeWidth: 2,
-                  strokeColor: Colors.purple,
-                );
-              },
-            ),
-            belowBarData: BarAreaData(
-              show: true,
+    return Container(
+      width: 292,
+      height: 200,
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.only(top: 24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A1A).withOpacity(0.3),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+          width: 1,
+        ),
+      ),
+      child: LineChart(
+        LineChartData(
+          gridData: FlGridData(show: false),
+          titlesData: FlTitlesData(show: false),
+          borderData: FlBorderData(show: false),
+          minX: 0,
+          maxX: 6,
+          minY: minY,
+          maxY: maxY,
+          lineBarsData: [
+            LineChartBarData(
+              spots: spots,
+              isCurved: true,
               gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
                 colors: [
-                  Colors.purple.withAlpha((0.3 * 255).toInt()),
-                  Colors.blue.withAlpha((0.05 * 255).toInt()),
+                  const Color(0xFF6C56F9),
+                  const Color(0xFF3B29AB),
                 ],
               ),
+              barWidth: 2,
+              isStrokeCapRound: true,
+              dotData: FlDotData(
+                show: true,
+                getDotPainter: (spot, percent, barData, index) =>
+                    FlDotCirclePainter(
+                  radius: 4,
+                  color: Colors.white,
+                  strokeWidth: 2,
+                  strokeColor: const Color(0xFF6C56F9),
+                ),
+              ),
+              belowBarData: BarAreaData(
+                show: true,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color(0xFF6C56F9).withOpacity(0.3),
+                    const Color(0xFF3B29AB).withOpacity(0.05),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

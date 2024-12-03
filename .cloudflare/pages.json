@@ -1,0 +1,9 @@
+{
+  "build": {
+    "command": "flutter build web --release",
+    "environment": {
+      "FLUTTER_VERSION": "3.26.0-1.0.pre.393"
+    },
+    "output_directory": "build/web"
+  }
+}

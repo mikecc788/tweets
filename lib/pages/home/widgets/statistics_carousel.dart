@@ -122,20 +122,6 @@ class _StatisticsCarouselState extends State<StatisticsCarousel>
                   );
                 },
               ),
-              if (statistics.length > 1) ...[
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: _buildNavigationButton(true),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: _buildNavigationButton(false),
-                ),
-              ],
             ],
           ),
         );
@@ -153,13 +139,17 @@ class _StatisticsCarouselState extends State<StatisticsCarousel>
         margin: EdgeInsets.symmetric(horizontal: 20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.3),
+          color: const Color(0xFF1A1A1A).withOpacity(0.3),
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.1),
+            width: 1,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: Offset(0, 5),
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 15,
+              offset: Offset(0, 8),
             ),
           ],
         ),
@@ -292,44 +282,6 @@ class _StatisticsCarouselState extends State<StatisticsCarousel>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  /// 构建导航按钮
-  /// [isLeft] - 是否为左侧按钮
-  /// 包含渐变背景和点击处理逻辑
-  Widget _buildNavigationButton(bool isLeft) {
-    return Container(
-      width: 40,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.black.withAlpha((0.5 * 255).toInt()),
-            Colors.transparent,
-          ],
-          begin: isLeft ? Alignment.centerLeft : Alignment.centerRight,
-          end: isLeft ? Alignment.centerRight : Alignment.centerLeft,
-        ),
-      ),
-      child: IconButton(
-        icon: Icon(
-          isLeft ? Icons.chevron_left : Icons.chevron_right,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          if (isLeft && _currentPage > 0) {
-            _pageController.previousPage(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else if (!isLeft && _currentPage < statistics.length - 1) {
-            _pageController.nextPage(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          }
-        },
       ),
     );
   }

@@ -13,6 +13,7 @@ class AppColors {
   static Color get backgroundGrey => const Color(0xFFF5F5F5);
   static Color get surfaceColor => const Color(0xFFF8F9FC);
 
+  static Color get topBgColor => const Color(0xFF121212);
   // Text Colors
   static Color get textPrimary => const Color(0xFF1C1C1E);
   static Color get textSecondary => const Color(0xFF8E8E93);

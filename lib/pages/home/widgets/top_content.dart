@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tweets/utils/gaps.dart';
+import 'package:tweets/widgets/circle_button.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/screen_adapter.dart';
 
@@ -20,12 +22,14 @@ class TopContent extends StatelessWidget {
         vertical: ScreenAdapter.setHeight(100),
       ),
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF000000),
-            const Color(0xFF1A1A1A),
+            const Color(0xFF382054),
+            const Color(0xFF121212),
+            const Color(0xFF19141E),
           ],
         ),
       ),
@@ -53,7 +57,7 @@ class TopContent extends StatelessWidget {
           ),
           SizedBox(height: ScreenAdapter.setHeight(24)),
           Text(
-            'Bring blockchain to the people. Solana supports experiences\nfor power users, new consumers, and everyone in between.',
+            'Bring blockchain to the people. Fast supports experiences\nfor power users, new consumers, and everyone in between.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: ScreenAdapter.fontSize(18),
@@ -65,18 +69,12 @@ class TopContent extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildButton(
-                'START BUILDING',
-                AppColors.primary,
-                onStartBuilding,
-              ),
-              SizedBox(width: ScreenAdapter.setWidth(16)),
-              _buildButton(
-                'RESOURCES',
-                Colors.transparent,
-                onResources,
+              CircleButton(
+                text: 'BUILDING',
                 border: true,
               ),
+              Gaps.h24,
+              CircleButton(text: 'RESOURCES', border: true),
             ],
           ),
           SizedBox(height: ScreenAdapter.setHeight(40)),
@@ -88,40 +86,6 @@ class TopContent extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildButton(
-    String text,
-    Color backgroundColor,
-    VoidCallback onPressed, {
-    bool border = false,
-  }) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
-        foregroundColor: AppColors.textLight,
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenAdapter.setWidth(32),
-          vertical: ScreenAdapter.setHeight(16),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: border
-              ? BorderSide(color: AppColors.textLight, width: 1)
-              : BorderSide.none,
-        ),
-        elevation: 0,
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: ScreenAdapter.fontSize(16),
-          fontWeight: FontWeight.w600,
-          letterSpacing: 1.2,
-        ),
       ),
     );
   }

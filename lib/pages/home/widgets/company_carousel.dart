@@ -78,12 +78,14 @@ class _CompanyCarouselState extends State<CompanyCarousel> {
             horizontal: ScreenAdapter.setWidth(80),
             vertical: ScreenAdapter.setHeight(20),
           ),
-          child: Text(
-            'The most innovative companies build on Sui',
-            style: TextStyle(
-              fontSize: ScreenAdapter.fontSize(16),
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
+          child: Center(
+            child: Text(
+              'The most innovative companies build on Fastly',
+              style: TextStyle(
+                fontSize: ScreenAdapter.fontSize(24),
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
